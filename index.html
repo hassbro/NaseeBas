@@ -302,7 +302,7 @@
         <div class="bg-[#272729] border border-[#3a3a3c] rounded-xl p-6 max-w-sm w-full text-right thaana-text">
             <h2 class="text-xl font-bold mb-3 text-emerald-400 border-b border-[#3a3a3c] pb-2">ކުޅޭނެ ގޮތް (Rules)</h2>
             <div class="space-y-3 text-xs sm:text-sm text-gray-200 leading-relaxed">
-                <p>ބޭނުންވާ ގޮތެއް އިޚްތިޔާރު ކުރައްވާ (3، 4 ނުވަތަ 5 އަކުރު):</p>
+                <p>ބޭނުންވާ މޯޑެއް އިޚްތިޔާރު ކުރައްވާ (3، 4 ނުވަތަ 5 އަކުރު):</p>
                 <ul class="list-disc pr-4 space-y-1 text-gray-300">
                     <li>3 އަކުރު - 4 ފުރުސަތު</li>
                     <li>4 އަކުރު - 5 ފުރުސަތު</li>
@@ -344,7 +344,7 @@
                     <i class="fa-solid fa-lock"></i>
                 </div>
             </div>
-            <p class="text-xs text-gray-300 mb-3">އެޑްމިންއަށް ވަނުމަށް ޕާސްވޯޑް ޖައްސަވާ:</p>
+            <p class="text-xs text-gray-300 mb-3">އެޑްމިން މޯޑަށް ވަނުމަށް ޕާސްވޯޑް ޖައްސަވާ:</p>
             <input type="password" id="admin-pass-input" placeholder="ޕާސްވޯޑް..." class="w-full bg-[#121213] border border-[#3a3a3c] rounded-xl py-2 px-3 text-sm text-white mb-2 text-center focus:outline-none focus:border-blue-500">
             <div id="auth-error" class="text-xs text-rose-400 hidden mb-2 text-center font-bold">ޕާސްވޯޑް ރަނގަޅެއް ނޫން!</div>
             <button id="admin-login-btn" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition text-xs flex items-center justify-center gap-1">
@@ -380,7 +380,7 @@
             <div class="flex items-center justify-between border-b border-[#3a3a3c] pb-3 mb-3">
                 <button id="close-admin" class="text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
                 <div class="flex items-center gap-2">
-                    <h2 class="text-lg font-bold text-blue-400">އެޑްމިން: ލަފުޒުތައް އަޅާ</h2>
+                    <h2 class="text-lg font-bold text-blue-400">އެޑްމިން: ލަފުޒުތައް އެތެރެކުރުން</h2>
                     <i class="fa-solid fa-user-gear text-blue-400"></i>
                 </div>
             </div>
@@ -397,22 +397,22 @@
             <!-- Mode 1: Separate Textareas for Bulk Words and Meanings -->
             <div id="view-separate" class="flex-1 overflow-y-auto space-y-3">
                 <p class="text-xs text-gray-300 leading-relaxed">
-                    ލަފުޒުތަކާއި މާނަތައް ވަކިވަކިން އަޅާ. ކޮންމެ ލަފުޒަކަށް އޭގެ މާނަ ގުޅުވާލެވޭނެއެވެ.
+                    ލަފުޒުތަކާއި މާނަތައް ވަކިވަކިން ކޮޕީކޮށް ޕޭސްޓް ކުރައްވާ. ކޮންމެ ރޭންކެއްގައިވާ ލަފުޒަކަށް ޖެހިގެންވާ މާނަ ގުޅުވާލެވޭނެއެވެ.
                 </p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div>
-                        <label class="block text-xs text-yellow-400 font-bold mb-1">1. ލަފުޒުތައް:</label>
+                        <label class="block text-xs text-yellow-400 font-bold mb-1">1. ލަފުޒުތައް (ކޮންމެ ރީތިއަކަށް ލަފުޒެއް):</label>
                         <textarea id="bulk-words-input" rows="8" placeholder="ދިވެހި&#10;ރާއްޖެ&#10;އިޙްތިރާމް" class="w-full bg-[#121213] border border-[#3a3a3c] rounded-lg p-2 text-xs text-white focus:outline-none focus:border-blue-500 text-right thaana-text resize-none"></textarea>
                     </div>
                     <div>
-                        <label class="block text-xs text-yellow-400 font-bold mb-1">2. މާނަތައް :</label>
+                        <label class="block text-xs text-yellow-400 font-bold mb-1">2. މާނަތައް (ކޮންމެ ރީތިއަކަށް މާނައެއް):</label>
                         <textarea id="bulk-meanings-input" rows="8" placeholder="ދިވެހިރާއްޖޭގެ ބަހާއި ގައުމިއްޔަތު&#10;ޖަޒީރާ ގައުމު ނުވަތަ ދައުލަތް&#10;އެހެން މީހުންނަށް ދެވޭ ޤަދަރު" class="w-full bg-[#121213] border border-[#3a3a3c] rounded-lg p-2 text-xs text-white focus:outline-none focus:border-blue-500 text-right thaana-text resize-none"></textarea>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs text-gray-400 mb-1">ބާވަތް / POS (އިޚްތިޔާރީ):</label>
+                    <label class="block text-xs text-gray-400 mb-1">ބާވަތް / POS (އިޚްތިޔާރީ - ކޮންމެ ރީތިއަކަށް):</label>
                     <input type="text" id="bulk-pos-input" placeholder="ނ. / ނއ. (ހުސްކޮށް ބެހެއްޓިދާނެ)" class="w-full bg-[#121213] border border-[#3a3a3c] rounded-lg p-2 text-xs text-white focus:outline-none focus:border-blue-500 text-right thaana-text">
                 </div>
             </div>
@@ -424,7 +424,7 @@
                 </p>
 
                 <div class="flex items-center justify-between bg-[#121213] p-2.5 rounded-xl border border-[#3a3a3c]">
-                    <span class="text-xs font-bold text-blue-400">CSV / TSV / TXT ފައިލް އަޅުއްވާ</span>
+                    <span class="text-xs font-bold text-blue-400">CSV / TSV / TXT ފައިލް އެތެރެކުރައްވާ</span>
                     <input type="file" id="admin-csv-file-input" accept=".csv,.tsv,.txt" class="hidden">
                     <button id="upload-csv-btn" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition">
                         <i class="fa-solid fa-file-csv"></i>
@@ -441,13 +441,13 @@
             <!-- Mode 3: PDF / Document Import -->
             <div id="view-pdf" class="flex-1 overflow-y-auto space-y-3 hidden">
                 <p class="text-xs text-gray-300 leading-relaxed">
-                    PDF، TXT ނުވަތަ ފޮޓޯ (OCR) ފައިލަކުން އޮޓޮމެޓިކުން ދިވެހި ލަފުޒުތައް ދެނެގަނެ އަޅުއްވާ:
+                    PDF، TXT ނުވަތަ އިމޭޖް (OCR) ފައިލަކުން އޮޓޮމެޓިކުން ދިވެހި ލަފުޒުތައް ދެނެގަނެ އެތެރެކުރައްވާ:
                 </p>
 
                 <div class="flex items-center justify-between bg-[#121213] p-3 rounded-xl border border-[#3a3a3c]">
                     <button id="upload-pdf-btn" class="bg-yellow-600 hover:bg-yellow-500 text-white text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5 transition">
                         <i class="fa-solid fa-file-pdf"></i>
-                        <span>PDF / TXT / OCR އަޅާ</span>
+                        <span>PDF / TXT / OCR އެތެރެކުރޭ</span>
                     </button>
                     <input type="file" id="pdf-file-input" accept=".pdf,.txt,image/*" class="hidden">
                     <span class="text-xs text-gray-300 font-bold">ފައިލް ނަންގަވާ</span>
@@ -1157,7 +1157,7 @@
 
             if (!isRowComplete) {
                 playSound(180, 0.15, 'sawtooth');
-                showToast("ކޮންމެ އަކުރަކަށް ފިއްޔެއް ޖައްސަވާ!");
+                showToast("ކޮންމެ އަކުރަކަށް ފިލިއެއް ޖައްސަވާ!");
                 return;
             }
 
@@ -1312,7 +1312,7 @@
                 titleEl.textContent = "މަރުހަބާ";
                 titleEl.className = "text-3xl font-black mb-3 text-emerald-400";
             } else {
-                titleEl.textContent = “އަލުން ކުޅެލާ!”;
+                titleEl.textContent = "ހިތާމަހުރި!";
                 titleEl.className = "text-3xl font-black mb-3 text-rose-500";
             }
 
@@ -1456,7 +1456,7 @@
                 } catch (e) {
                     console.warn("LocalStorage quota full", e);
                 }
-                statusEl.textContent = `${totalAdded} ލަފްޒު އެޅިއްޖެ!`;
+                statusEl.textContent = `${totalAdded} ލަފްޒު އެތެރެކުރެވިއްޖެ!`;
                 showToast(`${sourceName} ލަފްޒުތައް އިތުރުކުރެވިއްޖެ!`);
                 initRadheefModal();
                 initGameMode(currentMode);
@@ -1672,7 +1672,7 @@
                     const mode = parseInt(btn.getAttribute('data-mode'));
                     if (mode !== currentMode) {
                         initGameMode(mode);
-                        showToast(`${mode} އަކުރަށް ބަދަލުވެއްޖެ!`);
+                        showToast(`${mode} އަކުރުގެ މޯޑަށް ބަދަލުވެއްޖެ!`);
                     }
                 });
             });
@@ -1696,7 +1696,7 @@
                 if (passInput && passInput.value === adminPassword) {
                     adminAuthModal?.classList.add('hidden');
                     adminModal?.classList.remove('hidden');
-                    showToast("އެޑްމިން ބަޔަށް ވަދެވިއްޖެ!");
+                    showToast("އެޑްމިން މޯޑަށް ވަދެވިއްޖެ!");
                 } else {
                     if (authError) authError.classList.remove('hidden');
                     playSound(200, 0.15, 'sawtooth');
