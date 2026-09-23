@@ -91,10 +91,10 @@
         }
 
         .tile.active {
-            border-color: #6aaa64 !important;
-            box-shadow: 0 0 10px rgba(106, 170, 100, 0.4);
-            transform: scale(1.03);
-        }
+    border-color: #888;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+    transform: scale(1.03);
+}
 
         .tile.filled {
             border-color: #565758;
@@ -1003,66 +1003,74 @@
         }
 
         function initKeyboard() {
-            const keyboardContainer = document.getElementById('keyboard');
-            keyboardContainer.innerHTML = '';
+    const keyboardContainer = document.getElementById('keyboard');
+    keyboardContainer.innerHTML = '';
 
-            // ROW 1: Dedicated Fili Row
-            const filiRowEl = document.createElement('div');
-            filiRowEl.className = 'flex flex-row justify-center gap-1 w-full mb-1';
+    // ROW 1: Dedicated Fili Row
+    const filiRowEl = document.createElement('div');
+    filiRowEl.className = 'flex flex-row justify-center gap-1 w-full mb-1';
 
-            FILI_LIST.forEach(fili => {
-                const btn = document.createElement('button');
-                btn.id = `fili-key-${fili}`;
-                btn.className = 'key-btn fili-key thaana-text h-11 flex-1 max-w-[42px]';
-                btn.textContent = 'އ' + fili;
-                btn.title = `Fili: ${fili}`;
-                
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    handleFiliInput(fili);
-                });
-                filiRowEl.appendChild(btn);
-            });
-            keyboardContainer.appendChild(filiRowEl);
+    FILI_LIST.forEach(fili => {
+        const btn = document.createElement('button');
+        btn.id = `fili-key-${fili}`;
+        btn.className = 'key-btn fili-key thaana-text h-11 flex-1 max-w-[42px]';
+        btn.textContent = 'އ' + fili;
+        btn.title = `Fili: ${fili}`;
 
-            // ROW 2-4: Base Thaana Letters
-            THAANA_KEYBOARD.forEach(row => {
-                const rowEl = document.createElement('div');
-                rowEl.className = 'flex flex-row justify-center gap-1 w-full';
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            handleFiliInput(fili);
+        });
 
-                row.forEach(char => {
-                    const btn = document.createElement('button');
-                    btn.id = `key-${char}`;
-                    btn.className = 'key-btn thaana-text h-12 flex-1 max-w-[36px] sm:max-w-[42px] font-bold';
-                    btn.textContent = char;
+        filiRowEl.appendChild(btn);
+    });
 
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        handleLetterInput(char);
-                    });
-                    rowEl.appendChild(btn);
-                });
-                keyboardContainer.appendChild(rowEl);
+    keyboardContainer.appendChild(filiRowEl);
+
+    // ROW 2-4: Base Thaana Letters
+    THAANA_KEYBOARD.forEach(row => {
+        const rowEl = document.createElement('div');
+        rowEl.className = 'flex flex-row justify-center gap-1 w-full';
+
+        row.forEach(char => {
+            const btn = document.createElement('button');
+            btn.id = `key-${char}`;
+            btn.className = 'key-btn thaana-text h-12 flex-1 max-w-[36px] sm:max-w-[42px] font-bold';
+            btn.textContent = char;
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleLetterInput(char);
             });
 
-            // ROW 5: Action Keys (Backspace and Enter)
-            const actionRow = document.createElement('div');
-            actionRow.className = 'flex flex-row justify-between gap-1 mt-1 w-full';
+            rowEl.appendChild(btn);
+        });
 
-            const enterBtn = document.createElement('button');
-            enterBtn.className = 'key-btn h-12 flex-[2] bg-emerald-600 text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-emerald-500';
-            enterBtn.textContent = 'ENTER';
-            enterBtn.onclick = handleEnter;
+        keyboardContainer.appendChild(rowEl);
+    });
 
-            const backspaceBtn = document.createElement('button');
-            backspaceBtn.className = 'key-btn h-12 flex-[1.5] bg-[#565758] hover:bg-rose-600 text-base';
-            backspaceBtn.innerHTML = '<i class="fa-solid fa-backspace"></i>';
-            backspaceBtn.onclick = handleBackspace;
+    // ROW 5: Action Keys
+    const actionRow = document.createElement('div');
+    actionRow.className = 'flex flex-row justify-between gap-1 mt-1 w-full';
 
-            actionRow.appendChild(enterBtn);
-            actionRow.appendChild(backspaceBtn);
-            keyboardContainer.appendChild(actionRow);
-        }
+    const enterBtn = document.createElement('button');
+    enterBtn.className =
+        'key-btn h-12 flex-[2] bg-emerald-600 text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-emerald-500';
+    enterBtn.textContent = 'ENTER';
+    enterBtn.onclick = handleEnter;
+
+    const backspaceBtn = document.createElement('button');
+    backspaceBtn.className =
+        'key-btn h-12 flex-[1.5] bg-[#565758] hover:bg-rose-600 text-base';
+    backspaceBtn.innerHTML =
+        '<i class="fa-solid fa-backspace"></i>';
+    backspaceBtn.onclick = handleBackspace;
+
+    actionRow.appendChild(enterBtn);
+    actionRow.appendChild(backspaceBtn);
+
+    keyboardContainer.appendChild(actionRow);
+}
 
         function resetKeyboardColors() {
             document.querySelectorAll('.key-btn').forEach(btn => {
@@ -1075,200 +1083,516 @@
         }
 
         function handleLetterInput(char) {
-            if (isGameOver) return;
+    if (isGameOver) return;
 
-            if (currentTileIndex < 0) {
-                currentTileIndex = 0;
-            }
+    if (currentTileIndex < 0) {
+        currentTileIndex = 0;
+    }
 
-            playSound(320, 0.05, 'triangle');
-            boardState[currentRow][currentTileIndex].base = char;
-            boardState[currentRow][currentTileIndex].fili = ''; // Reset fili when selecting a new base letter
-            updateTileDisplay(currentRow, currentTileIndex);
+    const currentCell = boardState[currentRow][currentTileIndex];
+
+    if (!currentCell) return;
+
+    /*
+     * If the current tile already contains ނ with no fili,
+     * pressing ނ again means the player wants to keep ނ
+     * without a fili and move to the next tile.
+     */
+    if (
+        char === 'ނ' &&
+        currentCell.base === 'ނ' &&
+        currentCell.fili === ''
+    ) {
+        playSound(320, 0.05, 'triangle');
+
+        if (currentTileIndex > 0) {
+            setActiveTile(currentTileIndex - 1);
         }
+
+        return;
+    }
+
+    playSound(320, 0.05, 'triangle');
+
+    /*
+     * Selecting a new base letter replaces the previous
+     * base letter and clears its fili.
+     */
+    currentCell.base = char;
+    currentCell.fili = '';
+
+    updateTileDisplay(
+        currentRow,
+        currentTileIndex
+    );
+
+    /*
+     * Stay on the tile so a fili can be entered.
+     */
+    setActiveTile(currentTileIndex);
+}
 
         function handleFiliInput(fili) {
-            if (isGameOver) return;
-            if (currentTileIndex < 0) return;
+    if (isGameOver) return;
+    if (currentTileIndex < 0) return;
 
-            const currentCell = boardState[currentRow][currentTileIndex];
+    const currentCell = boardState[currentRow][currentTileIndex];
 
-            if (currentCell.base) {
-                playSound(440, 0.06, 'sine');
-                currentCell.fili = fili;
-                updateTileDisplay(currentRow, currentTileIndex);
+    if (!currentCell) return;
 
-                // Move right-to-left (towards index 0) automatically when fili is added
-                if (currentTileIndex > 0) {
-                    setActiveTile(currentTileIndex - 1);
-                }
-            } else {
-                playSound(200, 0.1, 'sawtooth');
-                showToast("ފުރަތަމަ އަކުރެއް ނަންގަވާ!");
-            }
+    /*
+     * A fili can only be added when there is a base letter.
+     */
+    if (!currentCell.base) {
+        playSound(200, 0.1, 'sawtooth');
+        showToast("ފުރަތަމަ އަކުރެއް ނަންގަވާ!");
+        return;
+    }
+
+    playSound(440, 0.06, 'sine');
+
+    /*
+     * Add/replace the fili on the current tile.
+     */
+    currentCell.fili = fili;
+
+    updateTileDisplay(
+        currentRow,
+        currentTileIndex
+    );
+
+    /*
+     * A base + fili combination is now complete,
+     * so move to the next tile from right to left.
+     */
+    if (currentTileIndex > 0) {
+        currentTileIndex--;
+
+        setActiveTile(currentTileIndex);
+    }
+}
+
+       function handleBackspace() {
+    if (isGameOver) return;
+
+    playSound(260, 0.05, 'square');
+
+    const row = boardState[currentRow];
+    const currentCell = row[currentTileIndex];
+
+    if (!currentCell) return;
+
+    // Remove fili first
+    if (currentCell.fili) {
+        currentCell.fili = '';
+        updateTileDisplay(currentRow, currentTileIndex);
+        setActiveTile(currentTileIndex);
+        return;
+    }
+
+    // Then remove base letter
+    if (currentCell.base) {
+        currentCell.base = '';
+        updateTileDisplay(currentRow, currentTileIndex);
+        setActiveTile(currentTileIndex);
+        return;
+    }
+
+    // Current tile is empty, so move to the previous tile
+    // (remember: RTL means +1 is the previous tile)
+    if (currentTileIndex < wordLength - 1) {
+        const previousIndex = currentTileIndex + 1;
+        const previousCell = row[previousIndex];
+
+        setActiveTile(previousIndex);
+
+        if (previousCell.fili) {
+            previousCell.fili = '';
+        } else if (previousCell.base) {
+            previousCell.base = '';
         }
 
-        function handleBackspace() {
-            if (isGameOver) return;
-
-            playSound(260, 0.05, 'square');
-            const currentCell = boardState[currentRow][currentTileIndex];
-
-            if (currentCell.fili) {
-                currentCell.fili = '';
-                updateTileDisplay(currentRow, currentTileIndex);
-            } 
-            else if (currentCell.base) {
-                currentCell.base = '';
-                updateTileDisplay(currentRow, currentTileIndex);
-            } 
-            else if (currentTileIndex < wordLength - 1) {
-                setActiveTile(currentTileIndex + 1);
-                const prevCell = boardState[currentRow][currentTileIndex];
-                if (prevCell.fili) {
-                    prevCell.fili = '';
-                } else {
-                    prevCell.base = '';
-                }
-                updateTileDisplay(currentRow, currentTileIndex);
-            }
-        }
+        updateTileDisplay(currentRow, previousIndex);
+    }
+}
 
         function updateTileDisplay(row, col) {
-            const tileEl = document.getElementById(`tile-${row}-${col}`);
-            const textSpan = document.getElementById(`tile-text-${row}-${col}`);
-            const cell = boardState[row][col];
-            
-            const combinedText = (cell.base || '') + (cell.fili || '');
-            textSpan.textContent = combinedText;
+    const tileEl = document.getElementById(`tile-${row}-${col}`);
+    const textSpan = document.getElementById(`tile-text-${row}-${col}`);
+    const cell = boardState[row][col];
 
-            if (combinedText) {
-                tileEl.classList.add('filled');
+    if (!tileEl || !textSpan || !cell) return;
+
+    const combinedText = (cell.base || '') + (cell.fili || '');
+    textSpan.textContent = combinedText;
+
+    if (combinedText) {
+        tileEl.classList.add('filled');
+    } else {
+        tileEl.classList.remove('filled');
+    }
+}
+
+       function handleEnter() {
+    if (isGameOver) return;
+
+    const currentRowData = boardState[currentRow];
+
+    // Every tile must contain a base letter.
+    const missingBaseIndex = currentRowData.findIndex(
+        tile => !tile || tile.base === ''
+    );
+
+    if (missingBaseIndex !== -1) {
+        playSound(180, 0.15, 'sawtooth');
+
+        showToast(
+            "ކޮންމެ ޓައިލެއް ފުރާލާ!"
+        );
+
+        setActiveTile(missingBaseIndex);
+        return;
+    }
+
+    // Every letter except ނ must have a fili.
+    const missingFiliIndex = currentRowData.findIndex(
+        tile => tile.base !== 'ނ' && tile.fili === ''
+    );
+
+    if (missingFiliIndex !== -1) {
+        playSound(180, 0.15, 'sawtooth');
+
+        showToast(
+            "ނަންގަވާ އަކުރަށް ފިލި ޖައްސަވާ!"
+        );
+
+        setActiveTile(missingFiliIndex);
+        return;
+    }
+
+    evaluateRowGuesses();
+}
+
+       function evaluateRowGuesses() {
+    const guessRow = boardState[currentRow];
+
+    const letterResults = Array(wordLength).fill('absent');
+    const filiResults = Array(wordLength).fill('absent');
+
+    /*
+     * IMPORTANT:
+     * The board is filled right-to-left, while targetWordObj
+     * is stored in normal word order.
+     *
+     * Therefore:
+     *
+     * board index 5 -> target index 0
+     * board index 4 -> target index 1
+     * board index 3 -> target index 2
+     * etc.
+     */
+    const getTargetIndex = (boardIndex) =>
+        wordLength - 1 - boardIndex;
+
+    /*
+     * ============================================================
+     * PASS 1 — EXACT BASE LETTER MATCHES
+     * ============================================================
+     */
+    const usedTargetLetters = Array(wordLength).fill(false);
+
+    for (let i = 0; i < wordLength; i++) {
+        const targetIndex = getTargetIndex(i);
+
+        const guessLetter = guessRow[i].base || '';
+        const targetLetter = targetWordObj[targetIndex].base || '';
+
+        if (guessLetter === targetLetter) {
+            letterResults[i] = 'correct';
+            usedTargetLetters[targetIndex] = true;
+        }
+    }
+
+    /*
+     * ============================================================
+     * PASS 2 — BASE LETTER EXISTS ELSEWHERE
+     * ============================================================
+     */
+    for (let i = 0; i < wordLength; i++) {
+
+        if (letterResults[i] === 'correct') continue;
+
+        const guessLetter = guessRow[i].base || '';
+
+        for (let j = 0; j < wordLength; j++) {
+
+            if (usedTargetLetters[j]) continue;
+
+            const targetLetter =
+                targetWordObj[j].base || '';
+
+            if (
+                guessLetter !== '' &&
+                guessLetter === targetLetter
+            ) {
+                letterResults[i] = 'present';
+                usedTargetLetters[j] = true;
+                break;
+            }
+        }
+    }
+
+    /*
+     * ============================================================
+     * PASS 3 — EXACT FILI MATCHES
+     * ============================================================
+     */
+    const usedTargetFilis = Array(wordLength).fill(false);
+
+// FIRST: exact fili matches
+for (let i = 0; i < wordLength; i++) {
+    const targetIndex = getTargetIndex(i);
+
+    const guessFili = guessRow[i].fili || '';
+    const targetFili = targetWordObj[targetIndex].fili || '';
+
+    // No fili in both guess and target
+    if (guessFili === '' && targetFili === '') {
+        filiResults[i] = 'correct';
+        usedTargetFilis[targetIndex] = true;
+        continue;
+    }
+
+    // Exact fili in the correct position
+    if (
+        guessFili !== '' &&
+        targetFili !== '' &&
+        guessFili === targetFili
+    ) {
+        filiResults[i] = 'correct';
+        usedTargetFilis[targetIndex] = true;
+    }
+}
+
+// SECOND: misplaced fili
+for (let i = 0; i < wordLength; i++) {
+    if (filiResults[i] === 'correct') continue;
+
+    const guessFili = guessRow[i].fili || '';
+
+    if (guessFili === '') {
+        filiResults[i] = 'absent';
+        continue;
+    }
+
+    for (let j = 0; j < wordLength; j++) {
+        if (usedTargetFilis[j]) continue;
+
+        const targetFili =
+            targetWordObj[j].fili || '';
+
+        if (
+            targetFili !== '' &&
+            guessFili === targetFili
+        ) {
+            filiResults[i] = 'present';
+            usedTargetFilis[j] = true;
+            break;
+        }
+    }
+}
+
+    /*
+     * ============================================================
+     * DEBUG
+     * ============================================================
+     */
+    console.log('========== NASEEBAS EVALUATION ==========');
+
+    for (let i = 0; i < wordLength; i++) {
+        const targetIndex = getTargetIndex(i);
+
+        console.log(
+            `BOARD ${i} -> TARGET ${targetIndex}:`,
+            'Guess =', guessRow[i],
+            '| Target =', targetWordObj[targetIndex],
+            '| Letter =', letterResults[i],
+            '| Fili =', filiResults[i]
+        );
+    }
+
+    console.log('==========================================');
+
+    /*
+     * ============================================================
+     * APPLY VISUAL RESULTS
+     * ============================================================
+     */
+    guessRow.forEach((tile, colIndex) => {
+
+        const tileEl = document.getElementById(
+            `tile-${currentRow}-${colIndex}`
+        );
+
+        const zoneFili = document.getElementById(
+            `zone-fili-${currentRow}-${colIndex}`
+        );
+
+        const zoneLetter = document.getElementById(
+            `zone-letter-${currentRow}-${colIndex}`
+        );
+
+        const lRes = letterResults[colIndex];
+        const fRes = filiResults[colIndex];
+
+        setTimeout(() => {
+
+            playSound(
+                400 + colIndex * 60,
+                0.08,
+                'sine'
+            );
+
+            tileEl.classList.add('flip');
+
+            /*
+             * UPPER HALF — FILI
+             */
+            if (fRes === 'correct') {
+    zoneFili.className = 'zone-fili bg-correct';
+} else if (fRes === 'present') {
+    zoneFili.className = 'zone-fili bg-present';
+} else {
+    zoneFili.className = 'zone-fili bg-absent';
+}
+
+            /*
+             * LOWER HALF — BASE LETTER
+             */
+            if (lRes === 'correct') {
+                zoneLetter.className =
+                    'zone-letter bg-correct';
+            } else if (lRes === 'present') {
+                zoneLetter.className =
+                    'zone-letter bg-present';
             } else {
-                tileEl.classList.remove('filled');
-            }
-        }
-
-        function handleEnter() {
-            if (isGameOver) return;
-
-            const currentRowData = boardState[currentRow];
-            const isRowComplete = currentRowData.every(tile => tile.base !== '' && tile.fili !== '');
-
-            if (!isRowComplete) {
-                playSound(180, 0.15, 'sawtooth');
-                showToast("ކޮންމެ އަކުރަކަށް ފިލިއެއް ޖައްސަވާ!");
-                return;
+                zoneLetter.className =
+                    'zone-letter bg-absent';
             }
 
-            evaluateRowGuesses();
+            /*
+             * TILE BORDER
+             */
+            if (
+                lRes === 'correct' ||
+                fRes === 'correct'
+            ) {
+                tileEl.style.borderColor = '#538d4e';
+            } else if (
+                lRes === 'present' ||
+                fRes === 'present'
+            ) {
+                tileEl.style.borderColor = '#b59f3b';
+            } else {
+                tileEl.style.borderColor = '#3a3a3c';
+            }
+
+            /*
+             * KEYBOARD STATUS
+             */
+            markKeyStatus(tile.base, lRes);
+
+            if (tile.fili) {
+                markFiliStatus(tile.fili, fRes);
+            }
+
+        }, colIndex * 180);
+    });
+
+    /*
+     * ============================================================
+     * WIN CHECK
+     * ============================================================
+     */
+    const isWin = guessRow.every((tile, i) => {
+
+        const targetIndex = getTargetIndex(i);
+
+        const guessBase = tile.base || '';
+        const guessFili = tile.fili || '';
+
+        const targetBase =
+            targetWordObj[targetIndex].base || '';
+
+        const targetFili =
+            targetWordObj[targetIndex].fili || '';
+
+        return (
+            guessBase === targetBase &&
+            guessFili === targetFili
+        );
+    });
+
+    /*
+     * ============================================================
+     * NEXT ROW / GAME END
+     * ============================================================
+     */
+    setTimeout(() => {
+
+        stats.played++;
+
+        if (isWin) {
+
+            isGameOver = true;
+
+            stats.wins++;
+            stats.streak++;
+
+            if (stats.streak > stats.maxStreak) {
+                stats.maxStreak = stats.streak;
+            }
+
+            saveStats();
+
+            playSound(600, 0.2, 'sine');
+
+            setTimeout(
+                () => playSound(800, 0.3, 'sine'),
+                150
+            );
+
+            showEndGameModal(true);
+
+        } else if (currentRow === maxRows - 1) {
+
+            isGameOver = true;
+
+            stats.streak = 0;
+
+            saveStats();
+
+            playSound(
+                200,
+                0.3,
+                'sawtooth'
+            );
+
+            showEndGameModal(false);
+
+        } else {
+
+            currentRow++;
+
+            currentTileIndex = wordLength - 1;
+
+            setActiveTile(currentTileIndex);
         }
 
-        function evaluateRowGuesses() {
-            const guessRow = boardState[currentRow];
-            
-            const letterCounts = {};
-            const filiCounts = {};
+        updateStatsModal();
 
-            targetWordObj.forEach(t => {
-                letterCounts[t.base] = (letterCounts[t.base] || 0) + 1;
-                filiCounts[t.fili] = (filiCounts[t.fili] || 0) + 1;
-            });
-
-            const letterResults = Array(wordLength).fill('absent');
-            const filiResults = Array(wordLength).fill('absent');
-
-            // --- PASS 1: Identify EXACT Matches (Green) ---
-            guessRow.forEach((tile, i) => {
-                if (tile.base === targetWordObj[i].base) {
-                    letterResults[i] = 'correct';
-                    letterCounts[tile.base]--;
-                }
-                if (tile.fili === targetWordObj[i].fili) {
-                    filiResults[i] = 'correct';
-                    filiCounts[tile.fili]--;
-                }
-            });
-
-            // --- PASS 2: Identify PRESENT Matches (Yellow) ---
-            guessRow.forEach((tile, i) => {
-                if (letterResults[i] !== 'correct') {
-                    if (letterCounts[tile.base] && letterCounts[tile.base] > 0) {
-                        letterResults[i] = 'present';
-                        letterCounts[tile.base]--;
-                    }
-                }
-                if (filiResults[i] !== 'correct') {
-                    if (filiCounts[tile.fili] && filiCounts[tile.fili] > 0) {
-                        filiResults[i] = 'present';
-                        filiCounts[tile.fili]--;
-                    }
-                }
-            });
-
-            // --- Apply Visual Updates with Reveal Flip Animation ---
-            guessRow.forEach((tile, colIndex) => {
-                const tileEl = document.getElementById(`tile-${currentRow}-${colIndex}`);
-                const zoneFili = document.getElementById(`zone-fili-${currentRow}-${colIndex}`);
-                const zoneLetter = document.getElementById(`zone-letter-${currentRow}-${colIndex}`);
-
-                const lRes = letterResults[colIndex];
-                const fRes = filiResults[colIndex];
-
-                setTimeout(() => {
-                    playSound(400 + colIndex * 60, 0.08, 'sine');
-                    tileEl.classList.add('flip');
-
-                    if (lRes === 'correct' && fRes === 'correct') {
-                        zoneFili.className = 'zone-fili bg-correct';
-                        zoneLetter.className = 'zone-letter bg-correct';
-                        tileEl.className = 'tile thaana-text border-correct';
-                    } else {
-                        zoneFili.className = `zone-fili bg-${fRes}`;
-                        zoneLetter.className = `zone-letter bg-${lRes}`;
-
-                        if (lRes === 'correct' || fRes === 'correct') {
-                            tileEl.style.borderColor = '#538d4e';
-                        } else if (lRes === 'present' || fRes === 'present') {
-                            tileEl.style.borderColor = '#b59f3b';
-                        } else {
-                            tileEl.style.borderColor = '#3a3a3c';
-                        }
-                    }
-
-                    markKeyStatus(tile.base, lRes);
-                    markFiliStatus(tile.fili, fRes);
-
-                }, colIndex * 180);
-            });
-
-            const isWin = letterResults.every(res => res === 'correct') && filiResults.every(res => res === 'correct');
-
-            setTimeout(() => {
-                stats.played++;
-                if (isWin) {
-                    isGameOver = true;
-                    stats.wins++;
-                    stats.streak++;
-                    if (stats.streak > stats.maxStreak) stats.maxStreak = stats.streak;
-                    saveStats();
-                    playSound(600, 0.2, 'sine');
-                    setTimeout(() => playSound(800, 0.3, 'sine'), 150);
-                    showEndGameModal(true);
-                } else if (currentRow === maxRows - 1) {
-                    isGameOver = true;
-                    stats.streak = 0;
-                    saveStats();
-                    playSound(200, 0.3, 'sawtooth');
-                    showEndGameModal(false);
-                } else {
-                    currentRow++;
-                    currentTileIndex = wordLength - 1; // Reset to rightmost tile for next row
-                    setActiveTile(wordLength - 1);
-                }
-                updateStatsModal();
-            }, wordLength * 180 + 100);
-        }
+    }, wordLength * 180 + 100);
+}
 
         function markKeyStatus(letterChar, status) {
             const keyEl = document.getElementById(`key-${letterChar}`);
