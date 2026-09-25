@@ -1585,8 +1585,14 @@ function normalizeFili(base, fili) {
 for (let i = 0; i < wordLength; i++) {
     const targetIndex = getTargetIndex(i);
 
-    const guessFili = guessRow[i].fili || '';
-    const targetFili = targetWordObj[targetIndex].fili || '';
+    const guessFili = normalizeFili(
+        guessRow[i].base,
+        guessRow[i].fili
+    );
+    const targetFili = normalizeFili(
+        targetWordObj[targetIndex].base,
+        targetWordObj[targetIndex].fili
+    );
 
     // No fili in both guess and target
     if (guessFili === '' && targetFili === '') {
@@ -1610,7 +1616,10 @@ for (let i = 0; i < wordLength; i++) {
 for (let i = 0; i < wordLength; i++) {
     if (filiResults[i] === 'correct') continue;
 
-    const guessFili = guessRow[i].fili || '';
+    const guessFili = normalizeFili(
+        guessRow[i].base,
+        guessRow[i].fili
+    );
 
     if (guessFili === '') {
         filiResults[i] = 'absent';
@@ -1620,8 +1629,10 @@ for (let i = 0; i < wordLength; i++) {
     for (let j = 0; j < wordLength; j++) {
         if (usedTargetFilis[j]) continue;
 
-        const targetFili =
-            targetWordObj[j].fili || '';
+        const targetFili = normalizeFili(
+            targetWordObj[j].base,
+            targetWordObj[j].fili
+        );
 
         if (
             targetFili !== '' &&
@@ -1767,30 +1778,21 @@ console.log('================================');
     const targetIndex = getTargetIndex(i);
 
     const guessBase = tile.base || '';
-    const guessFili = tile.fili || '';
+    const guessFili = normalizeFili(tile.base, tile.fili);
 
     const targetBase =
         targetWordObj[targetIndex].base || '';
 
-    const targetFili =
-        targetWordObj[targetIndex].fili || '';
+    const targetFili = normalizeFili(
+        targetWordObj[targetIndex].base,
+        targetWordObj[targetIndex].fili
+    );
 
     // Base letter must always match
     if (guessBase !== targetBase) {
         return false;
     }
 
-    // ނ is the only letter that may legitimately have no fili.
-    // If both guess and target have no fili, it is fully correct.
-    if (
-        guessBase === 'ނ' &&
-        guessFili === '' &&
-        targetFili === ''
-    ) {
-        return true;
-    }
-
-    // Otherwise the fili must match exactly.
     return guessFili === targetFili;
 });
 
