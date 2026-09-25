@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NaseeBas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <title>NaseeBas | ނަސީބަސް</title>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- PDF.js for parsing PDF files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <!-- Tesseract.js for OCR support on scanned PDFs and images -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-    
     <style>
         @font-face {
             font-family: 'Mv Typewriter';
@@ -38,6 +38,7 @@
             direction: rtl;
             unicode-bidi: isolate;
         }
+
 
         /* Tile Grid Dynamic Container */
         .grid-container-wrap {
@@ -242,27 +243,28 @@
     <div id="toast" class="toast thaana-text text-sm sm:text-base"></div>
 
     <!-- Header Section -->
-    <header class="w-full max-w-md border-b border-[#3a3a3c] pb-2 mb-2 flex flex-col gap-2">
-        <div class="flex items-center justify-between">
+          <header class="w-full max-w-2xl border-b border-[#3a3a3c] pb-2 mb-2 flex flex-col gap-2">        <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <i class="fa-solid fa-square-poll-vertical text-emerald-500 text-2xl"></i>
-                <h1 class="text-xl sm:text-2xl font-black tracking-wider uppercase">ތާނަ WORDLE</h1>
+                <span aria-hidden="true" class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-700 text-2xl font-black text-white shadow-md thaana-text" style="letter-spacing: -0.18em; padding-right: 0.18em">
+                    <span>ނ</span><span class="text-yellow-300">ބ</span>
+                </span>
+                <h1 class="flex flex-col leading-tight">
+                    <span class="text-xl sm:text-2xl font-black tracking-wider">NaseeBas</span>
+                    <span class="thaana-text text-xl sm:text-2xl font-black text-gray-300">ނަސީބަސް</span>
+                </h1>
             </div>
-            <div class="flex items-center gap-1">
-                <button id="admin-btn" title="Admin Bulk Manager" class="p-2 rounded hover:bg-[#3a3a3c] text-blue-400 transition">
-                    <i class="fa-solid fa-user-gear text-lg"></i>
+            <div class="flex items-center gap-1 shrink-0">
+<button id="admin-btn" title="Admin Bulk Manager" class="w-10 h-10 p-2 rounded hover:bg-[#3a3a3c] text-blue-400 transition">
+    <i class="fa-solid fa-user-gear text-lg"></i>
+</button>
                 </button>
-                <button id="radheef-btn" title="Dhivehi Radheef Dictionary" class="p-2 rounded hover:bg-[#3a3a3c] text-yellow-400 transition">
-                    <i class="fa-solid fa-book text-lg"></i>
+                <button id="radheef-btn" title="Dhivehi Radheef Dictionary" class="w-10 h-10 p-2 rounded hover:bg-[#3a3a3c] text-yellow-400 transition">                    <i class="fa-solid fa-book text-lg"></i>
                 </button>
-                <button id="stats-btn" title="Statistics" class="p-2 rounded hover:bg-[#3a3a3c] text-emerald-400 transition">
-                    <i class="fa-solid fa-chart-simple text-lg"></i>
+                <button id="stats-btn" title="Statistics" class="w-10 h-10 p-2 rounded hover:bg-[#3a3a3c] text-emerald-400 transition">                    <i class="fa-solid fa-chart-simple text-lg"></i>
                 </button>
-                <button id="help-btn" title="How to play" class="p-2 rounded hover:bg-[#3a3a3c] text-gray-300">
-                    <i class="fa-solid fa-circle-question text-lg"></i>
+                <button id="help-btn" title="How to play" class="w-10 h-10 p-2 rounded hover:bg-[#3a3a3c] text-gray-300">                    <i class="fa-solid fa-circle-question text-lg"></i>
                 </button>
-                <button id="reset-btn" title="New Game" class="p-2 rounded hover:bg-[#3a3a3c] text-gray-300">
-                    <i class="fa-solid fa-rotate-right text-lg"></i>
+                <button id="reset-btn" title="New Game" class="w-10 h-10 p-2 rounded hover:bg-[#3a3a3c] text-gray-300">                    <i class="fa-solid fa-rotate-right text-lg"></i>
                 </button>
             </div>
         </div>
@@ -345,31 +347,12 @@
                 </div>
             </div>
             <p class="text-xs text-gray-300 mb-3">އެޑްމިން މޯޑަށް ވަނުމަށް ޕާސްވޯޑް ޖައްސަވާ:</p>
-            <input type="password" id="admin-pass-input" placeholder="ޕާސްވޯޑް..." class="w-full bg-[#121213] border border-[#3a3a3c] rounded-xl py-2 px-3 text-sm text-white mb-2 text-center focus:outline-none focus:border-blue-500">
-            <div id="auth-error" class="text-xs text-rose-400 hidden mb-2 text-center font-bold">ޕާސްވޯޑް ރަނގަޅެއް ނޫން!</div>
+            <input type="email" id="admin-email-input" autocomplete="username" placeholder="Email" class="w-full bg-[#121213] border border-[#3a3a3c] rounded-xl py-2 px-3 text-sm text-white mb-2 text-center focus:outline-none focus:border-blue-500" dir="ltr">
+            <input type="password" id="admin-pass-input" autocomplete="current-password" placeholder="ޕާސްވޯޑް..." class="w-full bg-[#121213] border border-[#3a3a3c] rounded-xl py-2 px-3 text-sm text-white mb-2 text-center focus:outline-none focus:border-blue-500">
+            <div id="auth-error" class="text-xs text-rose-400 hidden mb-2 text-center font-bold">އީމެއިލް ނުވަތަ ޕާސްވޯޑް ރަނގަޅެއް ނޫން، ނުވަތަ އެޑްމިން އެކައުންޓެއް ނޫން.</div>
             <button id="admin-login-btn" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition text-xs flex items-center justify-center gap-1">
                 <i class="fa-solid fa-key"></i>
                 <span>ވަންނަވާ</span>
-            </button>
-            <p class="text-[10px] text-gray-500 text-center mt-2">(Default Password: admin123)</p>
-        </div>
-    </div>
-
-    <!-- Change Password Modal -->
-    <div id="change-pass-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-[#1e1e20] border border-[#3a3a3c] rounded-2xl p-5 max-w-xs w-full text-right thaana-text shadow-2xl">
-            <div class="flex items-center justify-between border-b border-[#3a3a3c] pb-2 mb-3">
-                <button id="close-change-pass" class="text-gray-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
-                <div class="flex items-center gap-1.5 text-blue-400 font-bold text-sm">
-                    <span>ޕާސްވޯޑް ބަދަލުކުރުން</span>
-                    <i class="fa-solid fa-key"></i>
-                </div>
-            </div>
-            <p class="text-xs text-gray-300 mb-3">އާ އެޑްމިން ޕާސްވޯޑް ޖައްސަވާ:</p>
-            <input type="password" id="new-pass-input" placeholder="އާ ޕާސްވޯޑް..." class="w-full bg-[#121213] border border-[#3a3a3c] rounded-xl py-2 px-3 text-sm text-white mb-3 text-center focus:outline-none focus:border-blue-500">
-            <button id="save-pass-btn" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition text-xs flex items-center justify-center gap-1">
-                <i class="fa-solid fa-check"></i>
-                <span>ރައްކާކުރޭ</span>
             </button>
         </div>
     </div>
@@ -462,9 +445,17 @@
                     <span>ހުރިހާ ލަފުޒުތަކެއް އެތެރެކުރޭ (Bulk Import)</span>
                 </button>
 
+                <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2 items-end rounded-lg border border-rose-900/70 bg-rose-950/20 p-2">
+                    <label class="text-xs text-rose-300 font-bold">މާނަތަކާއެކު ލަފުޒެއް ފުހުން
+                        <input id="delete-word-input" type="text" placeholder="ފުހުންވީ ލަފުޒު" class="mt-1 w-full bg-[#121213] border border-rose-900 rounded-lg p-2 text-sm text-white text-right thaana-text">
+                    </label>
+                    <button id="delete-word-btn" type="button" class="py-2 px-3 bg-rose-900 hover:bg-rose-800 text-white font-bold rounded-lg text-xs">ލަފުޒު ފުހޭ</button>
+                    <p class="sm:col-span-2 text-[10px] text-gray-400">ފުހުނީ އެ ލަފުޒާ ގުޅޭ ހުރިހާ މާނައެވެ.</p>
+                </div>
+
                 <div class="flex gap-2 text-xs relative z-50">
-                    <button id="change-pass-btn" type="button" class="flex-1 py-2 bg-zinc-800 hover:bg-zinc-700 text-gray-300 rounded-lg transition border border-[#3a3a3c] cursor-pointer">
-                        <i class="fa-solid fa-key ml-1"></i> ޕާސްވޯޑް
+                    <button id="admin-logout-btn" type="button" class="flex-1 py-2 bg-zinc-800 hover:bg-zinc-700 text-gray-300 rounded-lg transition border border-[#3a3a3c] cursor-pointer">
+                        <i class="fa-solid fa-right-from-bracket ml-1"></i> ލޮގްއައުޓް
                     </button>
                     <button id="admin-export-btn" type="button" class="flex-1 py-2 bg-zinc-800 hover:bg-zinc-700 text-gray-300 rounded-lg transition border border-[#3a3a3c] cursor-pointer">
                         <i class="fa-solid fa-download ml-1"></i> އެކްސްޕޯޓް (JSON)
@@ -555,6 +546,148 @@
     </div>
 
 <script>
+
+  const SUPABASE_URL = 'https://rycaxjhmziforstflvfj.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_zILNvljtVEnFMfTZepCQ0A_zADEQpJC';
+
+    const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+    console.log('SUPABASE CLIENT CREATED');
+    console.info('NaseeBas build: paginated dictionary, cached mode switching, Supabase Auth admin');
+
+supabaseClient
+    .from('words')
+    .select('id, word, length, letters, meaning, pos, active')
+    .eq('active', true)
+    .limit(5)
+    .then(({ data, error }) => {
+
+        if (error) {
+            console.error('SUPABASE ERROR:', error);
+            return;
+        }
+
+        console.log('========== SUPABASE WORDS ==========');
+        console.log(data);
+        console.log('====================================');
+    });
+
+    // ===============================
+// SUPABASE CONNECTION TEST
+// ===============================
+
+async function testSupabaseConnection() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('words')
+            .select('id, word, length, letters, meaning, pos, active')
+            .eq('active', true)
+            .limit(5);
+
+        if (error) {
+            console.error('Supabase connection error:', error);
+            showToast('Supabase ކެނެކްޝަން ކުރެވިނު!');
+            return;
+        }
+
+        console.log('========== SUPABASE TEST ==========');
+        console.log('Words loaded:', data);
+        console.log('Number of words:', data.length);
+        console.log('====================================');
+
+        showToast(`Supabase ކާމިޔާބު! ${data.length} ލަފުޒު ލޯޑުވެއްޖެ.`);
+    } catch (err) {
+        console.error('Supabase unexpected error:', err);
+    }
+}
+
+// ============================================
+// LOAD WORD DICTIONARY FROM SUPABASE
+// ============================================
+
+// Cache the in-flight request and loaded dictionary so changing modes is immediate.
+let supabaseWordsLoadPromise = null;
+
+async function loadWordsFromSupabase() {
+    if (supabaseWordsLoadPromise) return supabaseWordsLoadPromise;
+
+    supabaseWordsLoadPromise = (async () => {
+    try {
+        console.log('Loading words from Supabase...');
+
+        // Supabase limits each response (commonly to 1,000 rows), so fetch every page.
+        const PAGE_SIZE = 1000;
+        const data = [];
+
+        for (let from = 0; ; from += PAGE_SIZE) {
+            const { data: page, error } = await supabaseClient
+                .from('words')
+                .select('id, word, length, letters, meaning, pos, active')
+                .eq('active', true)
+                .order('id', { ascending: true })
+                .range(from, from + PAGE_SIZE - 1);
+
+            if (error) {
+                console.error('Failed to load words from Supabase:', error);
+                return false;
+            }
+            if (!page || page.length === 0) break;
+            data.push(...page);
+            if (page.length < PAGE_SIZE) break;
+        }
+
+        if (data.length === 0) {
+            console.warn('No active words found in Supabase.');
+            return false;
+        }
+
+        // Clear the existing dictionary
+        WORD_DICTIONARIES[3] = [];
+        WORD_DICTIONARIES[4] = [];
+        WORD_DICTIONARIES[5] = [];
+
+        // Convert Supabase format to the format
+        // already used by NaseeBas
+        data.forEach(row => {
+
+            if (
+                row.length < 3 ||
+                row.length > 5 ||
+                !Array.isArray(row.letters)
+            ) {
+                return;
+            }
+
+            WORD_DICTIONARIES[row.length].push({
+                word: row.letters,
+                text: row.word,
+                meaning: row.meaning || '',
+                pos: row.pos || '',
+                id: row.id
+            });
+        });
+
+        console.log('========== SUPABASE DICTIONARY ==========');
+        console.log('3 letters:', WORD_DICTIONARIES[3].length);
+        console.log('4 letters:', WORD_DICTIONARIES[4].length);
+        console.log('5 letters:', WORD_DICTIONARIES[5].length);
+        console.log('==========================================');
+
+        return true;
+
+    } catch (err) {
+        console.error('Unexpected error loading Supabase words:', err);
+        return false;
+    }
+    })();
+
+    const loaded = await supabaseWordsLoadPromise;
+    if (!loaded) supabaseWordsLoadPromise = null; // Allow retry after failed requests.
+    return loaded;
+}
         // FILI LIST
         const FILI_LIST = ['ް', 'ަ', 'ި', 'ު', 'ާ', 'ީ', 'ޫ', 'ޮ', 'ޯ', 'ެ', 'ޭ'];
 
@@ -618,7 +751,7 @@
                     meaning: "އިސްލާމްދީނުގެ ދެވަނަ ރުކުން އަދި އަޅުކަން."
                 },
                 {
-                    word: [{ base: 'ކ', fili: 'ަ' }, { base: 'ނ', fili: 'ް' }, { base: 'ޑ', fili: 'ު' }],
+                    word: [{ base: 'ކ', fili: 'ަ' }, { base: 'ނ', fili: '' }, { base: 'ޑ', fili: 'ު' }],
                     text: "ކަނޑު",
                     meaning: "ބޮޑު ފެންގަނޑު ނުވަތަ ކަނޑުގެ ސަރަހައްދު."
                 },
@@ -834,8 +967,8 @@
         let keyStatusMap = {};
         let filiStatusMap = {};
 
-        // Admin Password setting (default: admin123)
-        let adminPassword = localStorage.getItem('thaana_admin_password') || 'admin123';
+        // Supabase Auth and RLS control admin writes; this flag only controls the UI.
+        let isAuthenticatedWordAdmin = false;
 
         // Local Storage Stats
         let stats = JSON.parse(localStorage.getItem('thaana_wordle_stats') || '{"played":0,"wins":0,"streak":0,"maxStreak":0}');
@@ -897,45 +1030,82 @@
         }
 
         // Initialize application on DOM ready
-        window.addEventListener('DOMContentLoaded', () => {
-            initGameMode(5);
-            initKeyboard();
-            setupEventListeners();
-            initRadheefModal();
-            updateStatsModal();
-        });
+
+window.addEventListener('DOMContentLoaded', async () => {
+
+    // Initialize UI first
+    initKeyboard();
+    setupEventListeners();
+    initRadheefModal();
+    updateStatsModal();
+
+    // Then load the game
+    await initGameMode(3);
+});
 
         // Switch Game Mode & Re-initialize Board
-        function initGameMode(mode) {
-            currentMode = mode;
-            maxRows = MODE_CONFIG[mode].rows;
-            wordLength = MODE_CONFIG[mode].length;
+async function initGameMode(mode) {
+    currentMode = mode;
+    maxRows = MODE_CONFIG[mode].rows;
+    wordLength = MODE_CONFIG[mode].length;
 
-            currentRow = 0;
-            currentTileIndex = wordLength - 1; // RTL starts typing from rightmost tile (index wordLength - 1 down to 0)
-            isGameOver = false;
-            keyStatusMap = {};
-            filiStatusMap = {};
+    currentRow = 0;
+    currentTileIndex = wordLength - 1; // RTL starts typing from rightmost tile
+    isGameOver = false;
+    keyStatusMap = {};
+    filiStatusMap = {};
 
-            activeTargetObj = getRandomTargetWord(mode);
-            targetWordObj = activeTargetObj.word;
+    // Make sure the latest words are loaded from Supabase
+    const loaded = await loadWordsFromSupabase();
 
-            boardState = Array(maxRows).fill(null).map(() => 
-                Array(wordLength).fill(null).map(() => ({ base: '', fili: '' }))
-            );
+    if (!loaded) {
+        console.error('Could not load words from Supabase.');
+        showToast('ލަފުޒުތައް ލޯޑުވެއްޖެއް ނޫން!');
+        return;
+    }
 
-            // Update mode selector button active styles
-            document.querySelectorAll('.mode-btn').forEach(btn => {
-                if (parseInt(btn.getAttribute('data-mode')) === mode) {
-                    btn.classList.add('active-mode');
-                } else {
-                    btn.classList.remove('active-mode');
-                }
-            });
+    // Make sure there are words for this game mode
+    if (!WORD_DICTIONARIES[wordLength] ||
+        WORD_DICTIONARIES[wordLength].length === 0) {
 
-            initBoard();
-            resetKeyboardColors();
+        console.error(
+            `No ${wordLength}-letter words available.`
+        );
+
+        showToast(
+            `${wordLength} އަކުރުގެ ލަފުޒެއް ނެތް!`
+        );
+
+        return;
+    }
+
+    activeTargetObj = getRandomTargetWord(mode);
+    targetWordObj = activeTargetObj.word;
+
+    console.log(
+        'NaseeBas target loaded from Supabase:',
+        activeTargetObj
+    );
+
+    boardState = Array(maxRows).fill(null).map(() =>
+        Array(wordLength).fill(null).map(() => ({
+            base: '',
+            fili: ''
+        }))
+    );
+
+    // Update mode selector button active styles
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+        if (parseInt(btn.getAttribute('data-mode')) === mode) {
+            btn.classList.add('active-mode');
+        } else {
+            btn.classList.remove('active-mode');
         }
+    });
+
+    initBoard();
+    resetKeyboardColors();
+}
 
         function initBoard() {
             const container = document.getElementById('grid-container');
@@ -1273,6 +1443,17 @@
     evaluateRowGuesses();
 }
 
+function normalizeFili(base, fili) {
+    // In our word set, ނ can appear without a fili.
+    // The word data may store that as ނ + ް,
+    // so treat ް as "no fili" for ނ.
+    if (base === 'ނ' && fili === 'ް') {
+        return '';
+    }
+
+    return fili || '';
+}
+
        function evaluateRowGuesses() {
     const guessRow = boardState[currentRow];
 
@@ -1409,19 +1590,36 @@ for (let i = 0; i < wordLength; i++) {
      */
     console.log('========== NASEEBAS EVALUATION ==========');
 
-    for (let i = 0; i < wordLength; i++) {
-        const targetIndex = getTargetIndex(i);
+for (let i = 0; i < wordLength; i++) {
+    const targetIndex = getTargetIndex(i);
 
-        console.log(
-            `BOARD ${i} -> TARGET ${targetIndex}:`,
-            'Guess =', guessRow[i],
-            '| Target =', targetWordObj[targetIndex],
-            '| Letter =', letterResults[i],
-            '| Fili =', filiResults[i]
-        );
-    }
+    console.log(
+        `BOARD ${i} -> TARGET ${targetIndex}:`,
+        'Guess =', guessRow[i],
+        '| Target =', targetWordObj[targetIndex],
+        '| Letter =', letterResults[i],
+        '| Fili =', filiResults[i]
+    );
+}
 
-    console.log('==========================================');
+console.log('==========================================');
+
+console.log('========== WIN CHECK ==========');
+
+guessRow.forEach((tile, i) => {
+    const targetIndex = getTargetIndex(i);
+
+    console.log(
+        `WIN CHECK BOARD ${i} -> TARGET ${targetIndex}:`,
+        'GUESS =', tile,
+        '| TARGET =', targetWordObj[targetIndex],
+        '| BASE MATCH =', tile.base === targetWordObj[targetIndex].base,
+        '| FILI MATCH =',
+        (tile.fili || '') === (targetWordObj[targetIndex].fili || '')
+    );
+});
+
+console.log('================================');
 
     /*
      * ============================================================
@@ -1515,23 +1713,35 @@ for (let i = 0; i < wordLength; i++) {
      * ============================================================
      */
     const isWin = guessRow.every((tile, i) => {
+    const targetIndex = getTargetIndex(i);
 
-        const targetIndex = getTargetIndex(i);
+    const guessBase = tile.base || '';
+    const guessFili = tile.fili || '';
 
-        const guessBase = tile.base || '';
-        const guessFili = tile.fili || '';
+    const targetBase =
+        targetWordObj[targetIndex].base || '';
 
-        const targetBase =
-            targetWordObj[targetIndex].base || '';
+    const targetFili =
+        targetWordObj[targetIndex].fili || '';
 
-        const targetFili =
-            targetWordObj[targetIndex].fili || '';
+    // Base letter must always match
+    if (guessBase !== targetBase) {
+        return false;
+    }
 
-        return (
-            guessBase === targetBase &&
-            guessFili === targetFili
-        );
-    });
+    // ނ is the only letter that may legitimately have no fili.
+    // If both guess and target have no fili, it is fully correct.
+    if (
+        guessBase === 'ނ' &&
+        guessFili === '' &&
+        targetFili === ''
+    ) {
+        return true;
+    }
+
+    // Otherwise the fili must match exactly.
+    return guessFili === targetFili;
+});
 
     /*
      * ============================================================
@@ -1636,7 +1846,7 @@ for (let i = 0; i < wordLength; i++) {
                 titleEl.textContent = "މަރުހަބާ";
                 titleEl.className = "text-3xl font-black mb-3 text-emerald-400";
             } else {
-                titleEl.textContent = "ހިތާމަހުރި!";
+                titleEl.textContent = "ކާމިޔާބެއްނުވި";
                 titleEl.className = "text-3xl font-black mb-3 text-rose-500";
             }
 
@@ -1996,7 +2206,6 @@ for (let i = 0; i < wordLength; i++) {
                     const mode = parseInt(btn.getAttribute('data-mode'));
                     if (mode !== currentMode) {
                         initGameMode(mode);
-                        showToast(`${mode} އަކުރުގެ މޯޑަށް ބަދަލުވެއްޖެ!`);
                     }
                 });
             });
@@ -2004,66 +2213,54 @@ for (let i = 0; i < wordLength; i++) {
             // Admin Authentication Controls
             const adminAuthModal = document.getElementById('admin-auth-modal');
             const adminModal = document.getElementById('admin-modal');
+            const emailInput = document.getElementById('admin-email-input');
             const passInput = document.getElementById('admin-pass-input');
             const authError = document.getElementById('auth-error');
 
             addClick('admin-btn', () => {
+                if (emailInput) emailInput.value = '';
                 if (passInput) passInput.value = '';
                 if (authError) authError.classList.add('hidden');
                 adminAuthModal?.classList.remove('hidden');
-                setTimeout(() => passInput?.focus(), 100);
+                setTimeout(() => emailInput?.focus(), 100);
             });
-
             addClick('close-auth', () => adminAuthModal?.classList.add('hidden'));
 
-            const performAdminLogin = () => {
-                if (passInput && passInput.value === adminPassword) {
-                    adminAuthModal?.classList.add('hidden');
-                    adminModal?.classList.remove('hidden');
-                    showToast("އެޑްމިން މޯޑަށް ވަދެވިއްޖެ!");
-                } else {
+            const performAdminLogin = async () => {
+                const email = emailInput?.value.trim();
+                const password = passInput?.value || '';
+                if (!email || !password) {
                     if (authError) authError.classList.remove('hidden');
-                    playSound(200, 0.15, 'sawtooth');
+                    return;
                 }
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error || !data?.user) {
+                    if (authError) authError.classList.remove('hidden');
+                    return;
+                }
+                const { data: adminRecord, error: adminError } = await supabaseClient
+                    .from('word_admins').select('user_id').eq('user_id', data.user.id).maybeSingle();
+                if (adminError || !adminRecord) {
+                    await supabaseClient.auth.signOut();
+                    if (authError) authError.classList.remove('hidden');
+                    return;
+                }
+                isAuthenticatedWordAdmin = true;
+                adminAuthModal?.classList.add('hidden');
+                adminModal?.classList.remove('hidden');
             };
-
             addClick('admin-login-btn', performAdminLogin);
             passInput?.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') performAdminLogin();
             });
 
-            addClick('change-pass-btn', (e) => {
-                if (e) e.stopPropagation();
-                const newPassInput = document.getElementById('new-pass-input');
-                if (newPassInput) newPassInput.value = '';
-                document.getElementById('change-pass-modal')?.classList.remove('hidden');
-                setTimeout(() => newPassInput?.focus(), 100);
-            });
-
-            addClick('close-change-pass', (e) => {
-                if (e) e.stopPropagation();
-                document.getElementById('change-pass-modal')?.classList.add('hidden');
-            });
-
-            const performPasswordSave = () => {
-                const newPassInput = document.getElementById('new-pass-input');
-                const val = newPassInput ? newPassInput.value.trim() : '';
-                if (val.length > 0) {
-                    adminPassword = val;
-                    localStorage.setItem('thaana_admin_password', adminPassword);
-                    document.getElementById('change-pass-modal')?.classList.add('hidden');
-                    showToast("ޕާސްވޯޑް ބަދަލުކުރެވިއްޖެ!");
-                } else {
-                    showToast("ޕާސްވޯޑް ހުސްކޮށް ނުބެހެއްޓޭނެ!");
-                }
+            const closeAdminAndSignOut = async () => {
+                adminModal?.classList.add('hidden');
+                isAuthenticatedWordAdmin = false;
+                await supabaseClient.auth.signOut();
             };
-
-            addClick('save-pass-btn', performPasswordSave);
-            document.getElementById('new-pass-input')?.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') performPasswordSave();
-            });
-
-            addClick('close-admin', () => adminModal?.classList.add('hidden'));
+            addClick('admin-logout-btn', closeAdminAndSignOut);
+            addClick('close-admin', closeAdminAndSignOut);
 
             // Admin Tabs
             const tabSeparate = document.getElementById('tab-separate');
@@ -2125,13 +2322,18 @@ for (let i = 0; i < wordLength; i++) {
             }
 
             // Admin Bulk Import Logic
-            addClick('admin-import-btn', () => {
+            addClick('admin-import-btn', async () => {
+                if (!isAuthenticatedWordAdmin) {
+                    showToast('އެޑްމިން އެކައުންޓަށް ވަދެވުން ޖެހޭ.');
+                    return;
+                }
                 const isSeparateMode = viewSeparate && !viewSeparate.classList.contains('hidden');
                 const statusEl = document.getElementById('admin-status');
                 if (statusEl) statusEl.classList.remove('hidden');
 
                 let importedCount = { 3: 0, 4: 0, 5: 0 };
                 let totalAdded = 0;
+                let wordsToInsert = [];
 
                 if (isSeparateMode) {
                     const wordsText = document.getElementById('bulk-words-input')?.value || '';
@@ -2158,15 +2360,25 @@ for (let i = 0; i < wordLength; i++) {
 
                             const exists = WORD_DICTIONARIES[wordLen].some(w => w.text === reconstructedText);
                             if (!exists) {
-                                WORD_DICTIONARIES[wordLen].push({
-                                    word: parsed,
-                                    text: reconstructedText,
-                                    pos: pos,
-                                    meaning: meaning
-                                });
-                                importedCount[wordLen]++;
-                                totalAdded++;
-                            }
+    WORD_DICTIONARIES[wordLen].push({
+        word: parsed,
+        text: reconstructedText,
+        pos: pos,
+        meaning: meaning
+    });
+
+    wordsToInsert.push({
+        word: reconstructedText,
+        length: wordLen,
+        letters: parsed,
+        meaning: meaning,
+        pos: pos,
+        active: true
+    });
+
+    importedCount[wordLen]++;
+    totalAdded++;
+}
                         }
                     });
                 } else {
@@ -2196,35 +2408,101 @@ for (let i = 0; i < wordLength; i++) {
 
                                 const exists = WORD_DICTIONARIES[wordLen].some(w => w.text === reconstructedText);
                                 if (!exists) {
-                                    WORD_DICTIONARIES[wordLen].push({
-                                        word: parsed,
-                                        text: reconstructedText,
-                                        pos: pos,
-                                        meaning: meaning
-                                    });
-                                    importedCount[wordLen]++;
-                                    totalAdded++;
-                                }
+    WORD_DICTIONARIES[wordLen].push({
+        word: parsed,
+        text: reconstructedText,
+        pos: pos,
+        meaning: meaning
+    });
+
+    wordsToInsert.push({
+        word: reconstructedText,
+        length: wordLen,
+        letters: parsed,
+        meaning: meaning,
+        pos: pos,
+        active: true
+    });
+
+    importedCount[wordLen]++;
+    totalAdded++;
+}
                             }
                         }
                     });
                 }
 
                 if (totalAdded > 0) {
-                    try {
-                        localStorage.setItem('thaana_pdf_dictionaries', JSON.stringify(WORD_DICTIONARIES));
-                    } catch (e) {
-                        console.warn("LocalStorage full", e);
-                    }
+
+    const { data, error } = await supabaseClient
+        .from('words')
+        .insert(wordsToInsert)
+        .select();
+
+    if (error) {
+        console.error('Supabase import error:', error);
+
+        if (statusEl) {
+            statusEl.textContent =
+                `Supabase އަށް ލަފުޒު އެރުވޭނީ ނުވި: ${error.message}`;
+        }
+
+        showToast(
+            'Supabase އަށް ލަފުޒު އެރުވޭނީ ނުވި!'
+        );
+
+        return;
+    }
+
+    console.log('Words inserted into Supabase:', data);
+
+    if (statusEl) statusEl.textContent = `ކާމިޔާބު! ...`;
 
                     if (statusEl) statusEl.textContent = `ކާމިޔާބު! ${totalAdded} ލަފުޒު އިތުރުކުރެވިއްޖެ! (3 އަކުރު: ${importedCount[3]} | 4 އަކުރު: ${importedCount[4]} | 5 އަކުރު: ${importedCount[5]})`;
                     showToast(`${totalAdded} ލަފުޒު އެތެރެކުރެވިއްޖެ!`);
 
                     initRadheefModal();
-                    initGameMode(currentMode);
+                    supabaseWordsLoadPromise = null;
+                    await initGameMode(currentMode);
                 } else {
                     if (statusEl) statusEl.textContent = "އާ ލަފުޒެއް އިތުރެއް ނުކުރެވުނު (3-5 އަކުރުގެ އިޞްލާޙީ ލަފުޒެއް ނެތް ނުވަތަ ކުރިންވެސް ހުރި ލަފުޒުތަކެއް)";
                 }
+            });
+
+            addClick('delete-word-btn', async () => {
+                if (!isAuthenticatedWordAdmin) {
+                    showToast('އެޑްމިން އެކައުންޓަށް ވަދެވުން ޖެހޭ.');
+                    return;
+                }
+                const input = document.getElementById('delete-word-input');
+                const word = input?.value.trim();
+                const statusEl = document.getElementById('admin-status');
+                if (!word) {
+                    if (statusEl) statusEl.textContent = 'ފުހުންވީ ލަފުޒު ލިޔުއްވާ.';
+                    return;
+                }
+                const { data: matches, error: lookupError } = await supabaseClient
+                    .from('words').select('id').eq('word', word);
+                if (lookupError) {
+                    if (statusEl) statusEl.textContent = `ލަފުޒު ހޯދުމުގައި މައްސަލަ: ${lookupError.message}`;
+                    return;
+                }
+                if (!matches?.length) {
+                    if (statusEl) statusEl.textContent = 'އެ ލަފުޒެއް ނުފެނުނު.';
+                    return;
+                }
+                if (!window.confirm(`Delete ${matches.length} meaning row(s) for “${word}”?`)) return;
+                const { data: deleted, error } = await supabaseClient
+                    .from('words').delete().eq('word', word).select('id');
+                if (error) {
+                    if (statusEl) statusEl.textContent = `ފުހުން ނުކުރެވުނު: ${error.message}`;
+                    return;
+                }
+                if (input) input.value = '';
+                if (statusEl) statusEl.textContent = `ލަފުޒާއި ${deleted.length} މާނަ ފުހުނެވެ.`;
+                supabaseWordsLoadPromise = null;
+                await initGameMode(currentMode);
+                document.getElementById('radheef-search')?.dispatchEvent(new Event('input'));
             });
 
             addClick('admin-export-btn', () => {
@@ -2278,7 +2556,7 @@ for (let i = 0; i < wordLength; i++) {
 
             // Share Result
             addClick('share-btn', () => {
-                const shareText = `ތާނަ Wordle (${currentMode} އަކުރު)\nލަފްޒު: ${activeTargetObj?.text || ''}\nބޯޑު: ${currentRow + 1}/${maxRows}`;
+                const shareText = `NaseeBas (${currentMode} އަކުރު)\nލަފްޒު: ${activeTargetObj?.text || ''}\nބޯޑު: ${currentRow + 1}/${maxRows}`;
                 try {
                     const dummy = document.createElement('textarea');
                     document.body.appendChild(dummy);
@@ -2310,6 +2588,9 @@ for (let i = 0; i < wordLength; i++) {
                 }
             });
         }
+
+        testSupabaseConnection();
+
     </script>
 </body>
 </html>
