@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <title>NaseeBas | ނަސީބަސް</title>
@@ -24,6 +24,7 @@
             background-color: #121213;
             color: #ffffff;
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -33,10 +34,49 @@
             direction: rtl;
         }
 
+        body.viewport-locked {
+            height: 100vh;
+            height: 100dvh;
+            min-height: 0;
+            overflow: hidden;
+        }
+
         .thaana-text {
             font-family: 'Mv Typewriter', 'Faruma', 'MV Boli', 'Noto Sans Thaana', sans-serif;
             direction: rtl;
             unicode-bidi: isolate;
+        }
+
+        /* Keep the full board and keyboard reachable on shorter screens. */
+        @media (max-height: 900px) {
+            .tile-grid {
+                gap: 3px;
+                padding: 3px;
+            }
+
+            .tile-row {
+                gap: 3px;
+            }
+
+            .tile {
+                width: clamp(34px, 5.2vh, 44px);
+                height: clamp(34px, 5.2vh, 44px);
+                font-size: clamp(1.1rem, 3vh, 1.55rem);
+                border-radius: 6px;
+            }
+
+            #keyboard .key-btn {
+                height: clamp(36px, 4.4vh, 42px) !important;
+                font-size: clamp(1rem, 3.8vw, 1.25rem);
+            }
+
+            #keyboard .fili-key {
+                font-size: clamp(1rem, 4vh, 1.3rem);
+            }
+
+            footer {
+                margin-top: 2px;
+            }
         }
 
 
@@ -237,13 +277,13 @@
         }
     </style>
 </head>
-<body class="p-2 sm:p-4 flex flex-col items-center justify-between min-h-screen">
+<body class="p-2 sm:p-4 flex flex-col items-center justify-between">
 
     <!-- Toast Notification container -->
     <div id="toast" class="toast thaana-text text-sm sm:text-base"></div>
 
     <!-- Header Section -->
-          <header class="w-full max-w-2xl border-b border-[#3a3a3c] pb-2 mb-2 flex flex-col gap-2">        <div class="flex items-center justify-between">
+          <header class="w-full max-w-2xl border-b border-[#3a3a3c] pb-2 mb-2 flex flex-col gap-2">        <div class="flex flex-wrap items-center justify-between gap-2">
             <div class="flex items-center gap-2">
                 <span aria-hidden="true" class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-700 text-2xl font-black text-white shadow-md thaana-text" style="letter-spacing: -0.18em; padding-right: 0.18em">
                     <span>ނ</span><span class="text-yellow-300">ބ</span>
@@ -270,7 +310,7 @@
         </div>
 
         <!-- Mode Selector Bar -->
-        <div class="flex items-center justify-center gap-2 pt-1 thaana-text">
+        <div class="flex flex-wrap items-center justify-center gap-2 pt-1 thaana-text">
             <button class="mode-btn" data-mode="3">3 އަކުރު (4 ފުރުސަތު)</button>
             <button class="mode-btn" data-mode="4">4 އަކުރު (5 ފުރުސަތު)</button>
             <button class="mode-btn active-mode" data-mode="5">5 އަކުރު (6 ފުރުސަތު)</button>
@@ -288,12 +328,6 @@
 
     <!-- Keyboard Section -->
     <footer class="w-full max-w-lg mx-auto mt-2">
-        <!-- Fili Indicator Header -->
-        <div class="flex items-center justify-between px-2 mb-1">
-            <span class="text-xs text-yellow-400 font-semibold tracking-wide">ފިލި (Vowels)</span>
-            <span class="text-[10px] text-gray-400">އަކުރަކަށްފަހު ފިލި ޖެއްސެވުމުން ޖެހިގެން އިން ގޮޅިއަށް ބަދަލުވާނެ</span>
-        </div>
-
         <div id="keyboard" class="flex flex-col gap-1.5 w-full">
             <!-- Dynamic rows including top Fili row and letter rows -->
         </div>
@@ -1029,6 +1063,21 @@ async function loadWordsFromSupabase() {
             }, duration);
         }
 
+        function updateViewportScrollLock() {
+            const body = document.body;
+            if (!body) return;
+
+            // Measure the natural page height before deciding whether scrolling is needed.
+            body.classList.remove('viewport-locked');
+            const contentFits = document.documentElement.scrollHeight <= window.innerHeight + 2;
+            body.classList.toggle('viewport-locked', contentFits);
+
+            if (contentFits && window.scrollY > 0) window.scrollTo(0, 0);
+        }
+
+        window.addEventListener('resize', updateViewportScrollLock, { passive: true });
+        window.visualViewport?.addEventListener('resize', updateViewportScrollLock, { passive: true });
+
         // Initialize application on DOM ready
 
 window.addEventListener('DOMContentLoaded', async () => {
@@ -1038,6 +1087,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     setupEventListeners();
     initRadheefModal();
     updateStatsModal();
+    requestAnimationFrame(updateViewportScrollLock);
 
     // Then load the game
     await initGameMode(3);
@@ -1105,6 +1155,7 @@ async function initGameMode(mode) {
 
     initBoard();
     resetKeyboardColors();
+    requestAnimationFrame(updateViewportScrollLock);
 }
 
         function initBoard() {
