@@ -1585,14 +1585,21 @@ function normalizeFili(base, fili) {
 for (let i = 0; i < wordLength; i++) {
     const targetIndex = getTargetIndex(i);
 
-    const guessFili = normalizeFili(
-        guessRow[i].base,
-        guessRow[i].fili
-    );
+    const rawGuessFili = guessRow[i].fili || '';
+    const targetBase = targetWordObj[targetIndex].base || '';
     const targetFili = normalizeFili(
-        targetWordObj[targetIndex].base,
+        targetBase,
         targetWordObj[targetIndex].fili
     );
+    // Treat ނ + ް as no-fili only when it is the matching target ނ.
+    // Elsewhere an explicitly entered ް must still match a real sukun.
+    const guessFili =
+        guessRow[i].base === 'ނ' &&
+        targetBase === 'ނ' &&
+        rawGuessFili === 'ް' &&
+        targetFili === ''
+            ? ''
+            : rawGuessFili;
 
     // No fili in both guess and target
     if (guessFili === '' && targetFili === '') {
@@ -1616,10 +1623,7 @@ for (let i = 0; i < wordLength; i++) {
 for (let i = 0; i < wordLength; i++) {
     if (filiResults[i] === 'correct') continue;
 
-    const guessFili = normalizeFili(
-        guessRow[i].base,
-        guessRow[i].fili
-    );
+    const guessFili = guessRow[i].fili || '';
 
     if (guessFili === '') {
         filiResults[i] = 'absent';
@@ -1629,10 +1633,10 @@ for (let i = 0; i < wordLength; i++) {
     for (let j = 0; j < wordLength; j++) {
         if (usedTargetFilis[j]) continue;
 
-        const targetFili = normalizeFili(
-            targetWordObj[j].base,
-            targetWordObj[j].fili
-        );
+        // For misplaced-fili scoring, count the literal fili stored on every
+        // target tile. In particular, ނ + ް still contains a sukun that can
+        // make a guessed ް yellow when it is on a different letter/position.
+        const targetFili = targetWordObj[j].fili || '';
 
         if (
             targetFili !== '' &&
@@ -1778,13 +1782,13 @@ console.log('================================');
     const targetIndex = getTargetIndex(i);
 
     const guessBase = tile.base || '';
-    const guessFili = normalizeFili(tile.base, tile.fili);
+    const rawGuessFili = tile.fili || '';
 
     const targetBase =
         targetWordObj[targetIndex].base || '';
 
     const targetFili = normalizeFili(
-        targetWordObj[targetIndex].base,
+        targetBase,
         targetWordObj[targetIndex].fili
     );
 
@@ -1792,6 +1796,14 @@ console.log('================================');
     if (guessBase !== targetBase) {
         return false;
     }
+
+    const guessFili =
+        guessBase === 'ނ' &&
+        targetBase === 'ނ' &&
+        rawGuessFili === 'ް' &&
+        targetFili === ''
+            ? ''
+            : rawGuessFili;
 
     return guessFili === targetFili;
 });
@@ -1904,9 +1916,63 @@ console.log('================================');
             }
 
             wordEl.textContent = activeTargetObj ? activeTargetObj.text : '';
-            meaningEl.textContent = activeTargetObj ? (activeTargetObj.meaning || "މާނައެއް ނެތް") : '';
+            renderResultMeaning(
+                meaningEl,
+                activeTargetObj ? (activeTargetObj.meaning || "މާނައެއް ނެތް") : ''
+            );
 
             modal.classList.remove('hidden');
+        }
+
+        function renderResultMeaning(container, rawMeaning) {
+            const meaning = (rawMeaning || '').trim();
+            container.replaceChildren();
+
+            // Sense labels in dictionary rows are stored as text, e.g.
+            // "1 meaning one. 2 meaning two.". Render each sense separately
+            // so RTL bidi layout cannot bunch the numbers together.
+            const markers = Array.from(
+                meaning.matchAll(/(^|\s)(\d{1,2})\s+(?=[\u0780-\u07BF])/gu),
+                match => ({
+                    start: match.index + match[1].length,
+                    number: Number(match[2]),
+                    textStart: match.index + match[0].length
+                })
+            );
+            const isNumberedList = markers.length > 1 &&
+                markers[0].start === 0 &&
+                markers.every((marker, index) => marker.number === index + 1);
+
+            if (!isNumberedList) {
+                container.textContent = meaning;
+                return;
+            }
+
+            markers.forEach((marker, index) => {
+                const nextMarker = markers[index + 1];
+                const senseText = meaning
+                    .slice(marker.textStart, nextMarker ? nextMarker.start : meaning.length)
+                    .trim()
+                    .replace(/[.،؛;]\s*$/u, '');
+
+                const row = document.createElement('div');
+                row.className = 'flex w-full items-start gap-2 text-right';
+                row.dir = 'rtl';
+
+                const number = document.createElement('span');
+                number.className = 'shrink-0 font-semibold';
+                number.dir = 'ltr';
+                number.style.unicodeBidi = 'isolate';
+                number.textContent = `${marker.number}.`;
+
+                const text = document.createElement('span');
+                text.className = 'min-w-0 flex-1';
+                text.dir = 'rtl';
+                text.textContent = senseText;
+
+                row.append(number, text);
+                container.appendChild(row);
+            });
         }
 
         async function processTxtFile(file) {
